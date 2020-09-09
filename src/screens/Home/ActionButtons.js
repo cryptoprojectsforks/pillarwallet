@@ -31,7 +31,7 @@ import styled from 'styled-components/native';
 import CircleButton from 'components/CircleButton';
 import ReceiveModal, { ReceiveModalCenterFloatingItem } from 'screens/Asset/ReceiveModal';
 import ActionOptionsModal from 'components/ActionModal/ActionOptionsModal';
-import NewModal from 'components/Modals/SlideModal/NewModal';
+import ModalInstance from 'components/Modals/ModalInstance/ModalInstance';
 
 // constants
 import { defaultFiatCurrency } from 'constants/assetsConstants';
@@ -101,7 +101,7 @@ const ActionButtons = ({
       label: Platform.OS === 'ios' ? t('button.buyWithCardOrApplePay') : t('button.buyWithCard'),
       iconName: 'wallet',
       onPress: () => {
-        NewModal.close();
+        ModalInstance.close();
         navigation.navigate(SERVICES, { fromAssetCode: fiatCurrency });
       },
     },
@@ -110,7 +110,7 @@ const ActionButtons = ({
       label: t('button.sendFromAnotherWallet'),
       iconName: 'qrDetailed',
       onPress: () => {
-        NewModal.show({
+        ModalInstance.show({
           noPadding: true,
           noClose: true,
           centerFloatingItem: (<ReceiveModalCenterFloatingItem />),
@@ -127,7 +127,7 @@ const ActionButtons = ({
       label: t('button.exchange'),
       iconName: 'flip',
       onPress: () => {
-        NewModal.close();
+        ModalInstance.close();
         navigation.navigate(EXCHANGE);
       },
     },
@@ -137,14 +137,14 @@ const ActionButtons = ({
       iconName: 'present',
       hide: !rewardActive,
       onPress: () => {
-        NewModal.close();
+        ModalInstance.close();
         return goToInvitationFlow;
       },
     },
   ];
 
   const showAddFundsModal = () => {
-    NewModal.show({
+    ModalInstance.show({
       noClose: true,
       hideHeader: true,
       children:

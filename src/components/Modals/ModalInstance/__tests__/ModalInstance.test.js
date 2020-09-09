@@ -21,14 +21,14 @@ import * as React from 'react';
 import { BaseText } from 'components/Typography';
 import { shallow } from 'enzyme';
 import { defaultTheme } from 'utils/themes';
-import NewModal from '../NewModal';
+import ModalInstance from '../ModalInstance';
 
 describe('New Modal', () => {
-  it('should render NewModal with content with the instance', () => {
-    const wrapper = shallow(<NewModal theme={defaultTheme} />);
-    NewModal.modalInstances.push(wrapper.instance());
+  it('should render ModalInstance with content with the instance', () => {
+    const wrapper = shallow(<ModalInstance theme={defaultTheme} />);
+    ModalInstance.modalInstances.push(wrapper.instance());
     const ChildContent = () => <BaseText>Test</BaseText>;
-    NewModal.show({
+    ModalInstance.show({
       children: (<ChildContent />),
     });
     expect(wrapper.find(ChildContent)).toHaveLength(1);

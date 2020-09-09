@@ -45,7 +45,7 @@ import Button from 'components/Button';
 import { LabelBadge } from 'components/LabelBadge';
 import InsightWithButton from 'components/InsightWithButton';
 import { Note } from 'components/Note';
-import NewModal from 'components/Modals/SlideModal/NewModal';
+import ModalInstance from 'components/Modals/ModalInstance/ModalInstance';
 
 // utils
 import { spacing, appFont, fontSizes, lineHeights } from 'utils/variables';
@@ -487,7 +487,7 @@ class AddOrEditUser extends React.PureComponent<Props, State> {
     const { verifyingField } = this.state;
     const { user: { isPhoneVerified, isEmailVerified }, goToInvitationFlow } = this.props;
     if ((verifyingField === 'phone' && isPhoneVerified) || (verifyingField === 'email' && isEmailVerified)) {
-      NewModal.show({
+      ModalInstance.show({
         fullScreen: true,
         showHeader: true,
         insetTop: true,

@@ -43,7 +43,7 @@ import SWActivationModal from 'components/SWActivationModal';
 import CollectibleImage from 'components/CollectibleImage';
 import Spinner from 'components/Spinner';
 import ProfileImage from 'components/ProfileImage';
-import NewModal from 'components/Modals/SlideModal/NewModal';
+import ModalInstance from 'components/Modals/ModalInstance/ModalInstance';
 
 // utils
 import { spacing, fontStyles, fontSizes } from 'utils/variables';
@@ -476,13 +476,13 @@ export class EventDetail extends React.Component<Props, State> {
     const { navigation, event, onClose } = this.props;
     const { badgeId } = event;
     onClose();
-    NewModal.close();
+    ModalInstance.close();
     navigation.navigate(BADGE, { badgeId });
   };
 
   showReceiveModal = (receiveWalletAddress: string) => {
     this.props.onClose(() => {
-      NewModal.show({
+      ModalInstance.show({
         noPadding: true,
         noClose: true,
         centerFloatingItem: (<ReceiveModalCenterFloatingItem />),

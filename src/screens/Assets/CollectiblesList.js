@@ -45,7 +45,7 @@ import { images } from 'utils/images';
 // types
 import type { Collectible } from 'models/Collectible';
 import type { Theme } from 'models/Theme';
-import NewModal from '../../components/Modals/SlideModal/NewModal';
+import ModalInstance from '../../components/Modals/ModalInstance/ModalInstance';
 
 const EmptyStateWrapper = styled.View`
   align-items: center;
@@ -129,7 +129,7 @@ class CollectiblesList extends React.PureComponent<Props, *> {
 
   toggleReceiveModal = () => {
     const { activeAccountAddress } = this.props;
-    NewModal.show({
+    ModalInstance.show({
       noPadding: true,
       noClose: true,
       centerFloatingItem: (<ReceiveModalCenterFloatingItem />),

@@ -161,7 +161,7 @@ const ModalOverflow = styled.View`
   background-color: ${themedColors.card};
 `;
 
-class NewModal extends React.Component<Props, *> {
+class ModalInstance extends React.Component<Props, *> {
   state = {
     isVisible: false,
     contentHeight: 0,
@@ -169,7 +169,7 @@ class NewModal extends React.Component<Props, *> {
   };
 
   componentWillUnmount() {
-    NewModal.modalInstances.splice(NewModal.modalInstances.length - 1);
+    ModalInstance.modalInstances.splice(ModalInstance.modalInstances.length - 1);
   }
 
   static modalInstances: Object[] = [];
@@ -195,7 +195,7 @@ class NewModal extends React.Component<Props, *> {
   }
 
   handleOpen = (modalOptions) => {
-    if (NewModal.isVisible()) return;
+    if (ModalInstance.isVisible()) return;
     this.setState({
       modalOptions,
       isVisible: true,
@@ -397,4 +397,4 @@ class NewModal extends React.Component<Props, *> {
   }
 }
 
-export default NewModal;
+export default ModalInstance;

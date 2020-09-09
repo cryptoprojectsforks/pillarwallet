@@ -22,7 +22,7 @@ import { View } from 'react-native';
 import { ActionSheet } from 'native-base';
 import { withTheme } from 'styled-components';
 import Toast from 'components/Toast';
-import NewModal from 'components/Modals/SlideModal/NewModal';
+import ModalInstance from 'components/Modals/ModalInstance/ModalInstance';
 import type { Theme } from 'models/Theme';
 
 type Props = {
@@ -38,10 +38,10 @@ const Root = (props: Props) => (
         if (c && !Toast.toastInstances.includes(c)) Toast.toastInstances.push(c);
       }}
     />
-    <NewModal
+    <ModalInstance
       theme={props.theme}
       ref={c => {
-        if (c && !NewModal.modalInstances.includes(c)) NewModal.modalInstances.push(c);
+        if (c && !ModalInstance.modalInstances.includes(c)) ModalInstance.modalInstances.push(c);
       }}
     />
     <ActionSheet

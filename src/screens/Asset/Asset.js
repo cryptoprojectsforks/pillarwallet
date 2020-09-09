@@ -30,7 +30,7 @@ import { CachedImage } from 'react-native-cached-image';
 import t from 'translations/translate';
 
 // components
-import NewModal from 'components/Modals/SlideModal/NewModal';
+import ModalInstance from 'components/Modals/ModalInstance/ModalInstance';
 import AssetButtons from 'components/AssetButtons';
 import ActivityFeed from 'components/ActivityFeed';
 import ContainerWithHeader from 'components/Layout/ContainerWithHeader';
@@ -212,7 +212,7 @@ class AssetScreen extends React.Component<Props, *> {
   };
 
   openReceiveTokenModal = assetData => {
-    NewModal.show({
+    ModalInstance.show({
       noPadding: true,
       noClose: true,
       centerFloatingItem: (<ReceiveModalCenterFloatingItem />),
@@ -357,7 +357,7 @@ class AssetScreen extends React.Component<Props, *> {
             {
               icon: 'info-circle-inverse',
               onPress: () => {
-                  NewModal.show({
+                  ModalInstance.show({
                     title: assetData.name,
                     children: (
                       <Description small light>{assetData.description}</Description>
@@ -411,7 +411,7 @@ class AssetScreen extends React.Component<Props, *> {
           <AssetCardWrapper>
             <AssetButtons
               onPressReceive={() => {
-                NewModal.show({
+                ModalInstance.show({
                   noClose: true,
                   hideHeader: true,
                   children:

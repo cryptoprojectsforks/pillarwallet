@@ -36,7 +36,7 @@ import { BaseText, MediumText } from 'components/Typography';
 import EmptyStateParagraph from 'components/EmptyState/EmptyStateParagraph';
 import ActivityFeedItem from 'components/ActivityFeed/ActivityFeedItem';
 import EventDetails from 'components/EventDetails';
-import NewModal from 'components/Modals/SlideModal/NewModal';
+import ModalInstance from 'components/Modals/ModalInstance/ModalInstance';
 
 // utils
 import { groupAndSortByDate } from 'utils/common';
@@ -224,7 +224,7 @@ class ActivityFeed extends React.Component<Props, State> {
 
   selectEvent = (eventData: Object, itemData: Object) => {
     const { navigation, isForAllAccounts } = this.props;
-    NewModal.show({
+    ModalInstance.show({
       noClose: true,
       hideHeader: true,
       children: (
