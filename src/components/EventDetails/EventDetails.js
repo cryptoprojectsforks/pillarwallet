@@ -36,14 +36,14 @@ import t from 'translations/translate';
 import { BaseText, MediumText } from 'components/Typography';
 import { Spacing } from 'components/Layout';
 import Button from 'components/Button';
-import SlideModal from 'components/Modals/SlideModal';
 import Icon from 'components/Icon';
 import TankAssetBalance from 'components/TankAssetBalance';
-import ReceiveModal from 'screens/Asset/ReceiveModal';
+import ReceiveModal, { ReceiveModalCenterFloatingItem } from 'screens/Asset/ReceiveModal';
 import SWActivationModal from 'components/SWActivationModal';
 import CollectibleImage from 'components/CollectibleImage';
 import Spinner from 'components/Spinner';
 import ProfileImage from 'components/ProfileImage';
+import NewModal from 'components/Modals/SlideModal/NewModal';
 
 // utils
 import { spacing, fontStyles, fontSizes } from 'utils/variables';
@@ -198,9 +198,7 @@ type Props = {
 };
 
 type State = {
-  isReceiveModalVisible: boolean,
   SWActivationModalVisible: boolean,
-  receiveWalletAddress: string,
 };
 
 type EventData = {
@@ -331,9 +329,7 @@ export class EventDetail extends React.Component<Props, State> {
   timeout: ?TimeoutID;
 
   state = {
-    isReceiveModalVisible: false,
     SWActivationModalVisible: false,
-    receiveWalletAddress: '',
   };
 
   componentDidMount() {
@@ -480,11 +476,23 @@ export class EventDetail extends React.Component<Props, State> {
     const { navigation, event, onClose } = this.props;
     const { badgeId } = event;
     onClose();
+    NewModal.close();
     navigation.navigate(BADGE, { badgeId });
   };
 
   showReceiveModal = (receiveWalletAddress: string) => {
-    this.props.onClose(() => this.setState({ isReceiveModalVisible: true, receiveWalletAddress }));
+    this.props.onClose(() => {
+      NewModal.show({
+        noPadding: true,
+        noClose: true,
+        centerFloatingItem: (<ReceiveModalCenterFloatingItem />),
+        children: (
+          <ReceiveModal
+            address={receiveWalletAddress}
+          />
+        ),
+      });
+    });
   };
 
   topUpSW = () => {
@@ -1435,12 +1443,10 @@ export class EventDetail extends React.Component<Props, State> {
 
   render() {
     const {
-      isVisible, onClose, navigation, storybook,
+      navigation, storybook,
     } = this.props;
     const {
-      isReceiveModalVisible,
       SWActivationModalVisible,
-      receiveWalletAddress,
     } = this.state;
 
     let { event } = this.props;
@@ -1494,19 +1500,7 @@ export class EventDetail extends React.Component<Props, State> {
 
     return (
       <React.Fragment>
-        <SlideModal
-          isVisible={isVisible}
-          onModalHide={onClose}
-          noClose
-          hideHeader
-        >
-          {this.renderContent(event, eventData)}
-        </SlideModal>
-        <ReceiveModal
-          isVisible={isReceiveModalVisible}
-          address={receiveWalletAddress}
-          onModalHide={() => this.setState({ isReceiveModalVisible: false })}
-        />
+        {this.renderContent(event, eventData)}
         <SWActivationModal
           isVisible={SWActivationModalVisible}
           onClose={() => this.setState({ SWActivationModalVisible: false })}

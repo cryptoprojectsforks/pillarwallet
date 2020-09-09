@@ -20,7 +20,6 @@
 import * as React from 'react';
 import { SafeAreaView } from 'react-navigation';
 import styled from 'styled-components/native';
-import SlideModal from 'components/Modals/SlideModal';
 import { BaseText, MediumText } from 'components/Typography';
 import ListItemWithImage from 'components/ListItem/ListItemWithImage';
 import { themedColors } from 'utils/themes';
@@ -30,15 +29,13 @@ type ItemType = {
   label: string,
   key: string,
   iconName?: string,
-  onPress: () => void,
+  onPress: Function,
   value?: string,
   isDisabled?: boolean,
   hide?: boolean,
 }
 
 type Props = {
-  onModalClose: (Function) => void,
-  isVisible: boolean,
   items: ItemType[],
   doNotCloseOnPress?: boolean,
   title?: string,
@@ -50,7 +47,6 @@ const MainContainer = styled(SafeAreaView)`
 
 class ActionOptionsModal extends React.Component<Props> {
   renderItem = (item: ItemType) => {
-    const { onModalClose, doNotCloseOnPress } = this.props;
     const {
       label,
       onPress,
@@ -65,7 +61,7 @@ class ActionOptionsModal extends React.Component<Props> {
           <BaseText medium>{label}</BaseText>
         )}
         disabled={isDisabled}
-        onPress={() => doNotCloseOnPress ? onPress() : onModalClose(onPress)}
+        onPress={onPress}
         diameter={48}
         iconName={iconName}
         iconColor={themedColors.link}
@@ -77,28 +73,21 @@ class ActionOptionsModal extends React.Component<Props> {
 
   render() {
     const {
-      onModalClose, isVisible, items, title,
+      items, title,
     } = this.props;
 
     return (
-      <SlideModal
-        isVisible={isVisible}
-        noClose
-        hideHeader
-        onModalHide={onModalClose}
-      >
-        <MainContainer>
-          {!!title &&
-          <MediumText
-            style={{ paddingBottom: 22, paddingHorizontal: spacing.layoutSides }}
-            center
-            big
-          >
-            {title}
-          </MediumText>}
-          {items.filter(({ hide }) => !hide).map(this.renderItem)}
-        </MainContainer>
-      </SlideModal>
+      <MainContainer>
+        {!!title &&
+        <MediumText
+          style={{ paddingBottom: 22, paddingHorizontal: spacing.layoutSides }}
+          center
+          big
+        >
+          {title}
+        </MediumText>}
+        {items.filter(({ hide }) => !hide).map(this.renderItem)}
+      </MainContainer>
     );
   }
 }

@@ -36,6 +36,7 @@ import { BaseText, MediumText } from 'components/Typography';
 import EmptyStateParagraph from 'components/EmptyState/EmptyStateParagraph';
 import ActivityFeedItem from 'components/ActivityFeed/ActivityFeedItem';
 import EventDetails from 'components/EventDetails';
+import NewModal from 'components/Modals/SlideModal/NewModal';
 
 // utils
 import { groupAndSortByDate } from 'utils/common';
@@ -222,10 +223,19 @@ class ActivityFeed extends React.Component<Props, State> {
   }
 
   selectEvent = (eventData: Object, itemData: Object) => {
-    this.setState({
-      selectedEventData: eventData,
-      selectedEventItemData: itemData,
-      showModal: true,
+    const { navigation, isForAllAccounts } = this.props;
+    NewModal.show({
+      noClose: true,
+      hideHeader: true,
+      children: (
+        <EventDetails
+          event={eventData}
+          itemData={itemData}
+          navigation={navigation}
+          onClose={this.handleClose}
+          isForAllAccounts={isForAllAccounts}
+        />
+      ),
     });
   };
 
@@ -317,7 +327,6 @@ class ActivityFeed extends React.Component<Props, State> {
   render() {
     const {
       feedTitle,
-      navigation,
       wrapperStyle,
       noBorder,
       contentContainerStyle,
@@ -330,16 +339,10 @@ class ActivityFeed extends React.Component<Props, State> {
       headerComponent,
       tabsComponent,
       flatListProps,
-      isForAllAccounts,
       card,
     } = this.props;
 
-    const {
-      showModal,
-      selectedEventData,
-      tabIsChanging,
-      selectedEventItemData,
-    } = this.state;
+    const { tabIsChanging } = this.state;
 
     const formattedFeedData = this.generateFeedSections(
       tabs, activeTab, feedData, headerComponent, tabsComponent, card,
@@ -379,16 +382,6 @@ class ActivityFeed extends React.Component<Props, State> {
           stickyHeaderIndices={[1]}
           {...flatListProps}
         />}
-        {!!selectedEventData &&
-          <EventDetails
-            isVisible={showModal}
-            event={selectedEventData}
-            itemData={selectedEventItemData}
-            navigation={navigation}
-            onClose={this.handleClose}
-            isForAllAccounts={isForAllAccounts}
-          />
-        }
       </ActivityFeedWrapper>
     );
   }

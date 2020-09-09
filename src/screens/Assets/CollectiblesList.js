@@ -31,7 +31,7 @@ import ShadowedCard from 'components/ShadowedCard';
 import { BaseText } from 'components/Typography';
 import CollectibleImage from 'components/CollectibleImage';
 import Button from 'components/Button';
-import ReceiveModal from 'screens/Asset/ReceiveModal';
+import ReceiveModal, { ReceiveModalCenterFloatingItem } from 'screens/Asset/ReceiveModal';
 
 // constants
 import { COLLECTIBLE } from 'constants/navigationConstants';
@@ -45,6 +45,7 @@ import { images } from 'utils/images';
 // types
 import type { Collectible } from 'models/Collectible';
 import type { Theme } from 'models/Theme';
+import NewModal from '../../components/Modals/SlideModal/NewModal';
 
 const EmptyStateWrapper = styled.View`
   align-items: center;
@@ -87,15 +88,7 @@ type CollectibleItem = {
   item: Collectible,
 };
 
-type State = {
-  isReceiveVisible: boolean,
-}
-
-class CollectiblesList extends React.PureComponent<Props, State> {
-  state = {
-    isReceiveVisible: false,
-  };
-
+class CollectiblesList extends React.PureComponent<Props, *> {
   handleCardTap = (assetData: Collectible) => {
     const { navigation } = this.props;
 
@@ -135,12 +128,21 @@ class CollectiblesList extends React.PureComponent<Props, State> {
   };
 
   toggleReceiveModal = () => {
-    this.setState(({ isReceiveVisible }) => ({ isReceiveVisible: !isReceiveVisible }));
+    const { activeAccountAddress } = this.props;
+    NewModal.show({
+      noPadding: true,
+      noClose: true,
+      centerFloatingItem: (<ReceiveModalCenterFloatingItem />),
+      children: (
+        <ReceiveModal
+          address={activeAccountAddress}
+        />
+      ),
+    });
   };
 
   render() {
-    const { searchQuery, collectibles, activeAccountAddress } = this.props;
-    const { isReceiveVisible } = this.state;
+    const { searchQuery, collectibles } = this.props;
 
     const emptyStateInfo = {
       title: t('collectiblesList.emptyState.noCollectibles.title'),
@@ -183,11 +185,6 @@ class CollectiblesList extends React.PureComponent<Props, State> {
           removeClippedSubviews
           viewabilityConfig={viewConfig}
           keyboardShouldPersistTaps="always"
-        />
-        <ReceiveModal
-          address={activeAccountAddress}
-          onModalHide={this.toggleReceiveModal}
-          isVisible={isReceiveVisible}
         />
       </>
     );

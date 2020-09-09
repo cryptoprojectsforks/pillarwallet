@@ -45,6 +45,7 @@ import Button from 'components/Button';
 import { LabelBadge } from 'components/LabelBadge';
 import InsightWithButton from 'components/InsightWithButton';
 import { Note } from 'components/Note';
+import NewModal from 'components/Modals/SlideModal/NewModal';
 
 // utils
 import { spacing, appFont, fontSizes, lineHeights } from 'utils/variables';
@@ -69,7 +70,6 @@ import CautionModal from './CautionModal';
 import VerifiedModal from './VerifiedModal';
 import InviteBanner from './InviteBanner';
 
-
 type Props = {
   navigation: NavigationScreenProp<*>,
   oneTimePasswordSent: boolean,
@@ -92,7 +92,6 @@ type State = {
   focusedField: ?string,
   value: Object,
   cautionModalField: ?string,
-  verifiedModalField: ?string,
 };
 
 const RootContainer = styled.View`
@@ -330,7 +329,6 @@ class AddOrEditUser extends React.PureComponent<Props, State> {
       value: getInitialValue(user),
       focusedField: null,
       cautionModalField: null,
-      verifiedModalField: null,
     };
   }
 
@@ -487,9 +485,19 @@ class AddOrEditUser extends React.PureComponent<Props, State> {
 
   onCloseVerification = () => {
     const { verifyingField } = this.state;
-    const { isPhoneVerified, isEmailVerified } = this.props.user;
+    const { user: { isPhoneVerified, isEmailVerified }, goToInvitationFlow } = this.props;
     if ((verifyingField === 'phone' && isPhoneVerified) || (verifyingField === 'email' && isEmailVerified)) {
-      this.setState({ verifiedModalField: verifyingField });
+      NewModal.show({
+        fullScreen: true,
+        showHeader: true,
+        insetTop: true,
+        children: (
+          <VerifiedModal
+            onButtonPress={goToInvitationFlow}
+            verifiedField={verifyingField}
+          />
+        ),
+      });
     }
     this.setState({ verifyingField: null });
   };
@@ -568,10 +576,9 @@ class AddOrEditUser extends React.PureComponent<Props, State> {
       value,
       focusedField,
       cautionModalField,
-      verifiedModalField,
     } = this.state;
     const {
-      user, navigation, theme, accounts, goToInvitationFlow,
+      user, navigation, theme, accounts,
     } = this.props;
 
     const {
@@ -646,12 +653,6 @@ class AddOrEditUser extends React.PureComponent<Props, State> {
           onModalHide={this.onDismissCautionModal}
           onButtonPress={this.changeField}
           focusedField={cautionModalField}
-        />
-        <VerifiedModal
-          isVisible={!!verifiedModalField}
-          onModalHide={() => this.setState({ verifiedModalField: null })}
-          onButtonPress={goToInvitationFlow}
-          verifiedField={verifiedModalField}
         />
       </ContainerWithHeader>
     );

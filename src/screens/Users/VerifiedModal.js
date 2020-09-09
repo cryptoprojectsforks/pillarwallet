@@ -25,7 +25,6 @@ import t from 'translations/translate';
 
 import { MediumText, BaseText } from 'components/Typography';
 import Button from 'components/Button';
-import SlideModal from 'components/Modals/SlideModal';
 import Icon from 'components/Icon';
 import { Spacing } from 'components/Layout';
 import { themedColors } from 'utils/themes';
@@ -57,7 +56,7 @@ const LikeIcon = styled(Icon)`
 
 const VerifiedModal = (props: Props) => {
   const {
-    isVisible, onModalHide, verifiedField, onButtonPress, isPillarRewardCampaignActive, rewardsByCampaign,
+    verifiedField, onButtonPress, isPillarRewardCampaignActive, rewardsByCampaign,
   } = props;
   const rewardText = getCampaignRewardText(rewardsByCampaign.pillar);
   const allowedReferralMethodText = verifiedField === 'phone'
@@ -72,23 +71,15 @@ const VerifiedModal = (props: Props) => {
     : `${allowedReferralMethodText} ${t('referralsContent.paragraph.getBadgesForEachInvitation')}`;
 
   return (
-    <SlideModal
-      fullScreen
-      showHeader
-      insetTop
-      isVisible={isVisible}
-      onModalHide={onModalHide}
-    >
-      <Wrapper>
-        <LikeIcon name="like" />
-        <Spacing h={40} />
-        <MediumText center large>{verifiedDataParagraph}</MediumText>
-        <Spacing h={15} />
-        <BaseText center medium>{text}</BaseText>
-        <Spacing h={32} />
-        <Button title={t('button.inviteFriends')} onPress={onButtonPress} />
-      </Wrapper>
-    </SlideModal>
+    <Wrapper>
+      <LikeIcon name="like" />
+      <Spacing h={40} />
+      <MediumText center large>{verifiedDataParagraph}</MediumText>
+      <Spacing h={15} />
+      <BaseText center medium>{text}</BaseText>
+      <Spacing h={32} />
+      <Button title={t('button.inviteFriends')} onPress={onButtonPress} />
+    </Wrapper>
   );
 };
 

@@ -18,38 +18,19 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 import * as React from 'react';
-import { View } from 'react-native';
-import { ActionSheet } from 'native-base';
-import { withTheme } from 'styled-components';
-import Toast from 'components/Toast';
-import NewModal from 'components/Modals/SlideModal/NewModal';
-import type { Theme } from 'models/Theme';
+import { BaseText } from 'components/Typography';
+import { shallow } from 'enzyme';
+import { defaultTheme } from 'utils/themes';
+import NewModal from '../NewModal';
 
-type Props = {
-  children: React.Node,
-  theme: Theme,
-}
-
-const Root = (props: Props) => (
-  <View {...props} style={{ flex: 1 }}>
-    {props.children}
-    <Toast
-      ref={c => {
-        if (c && !Toast.toastInstances.includes(c)) Toast.toastInstances.push(c);
-      }}
-    />
-    <NewModal
-      theme={props.theme}
-      ref={c => {
-        if (c && !NewModal.modalInstances.includes(c)) NewModal.modalInstances.push(c);
-      }}
-    />
-    <ActionSheet
-      ref={c => {
-        if (c) ActionSheet.actionsheetInstance = c;
-      }}
-    />
-  </View>
-);
-
-export default withTheme(Root);
+describe('New Modal', () => {
+  it('should render NewModal with content with the instance', () => {
+    const wrapper = shallow(<NewModal theme={defaultTheme} />);
+    NewModal.modalInstances.push(wrapper.instance());
+    const ChildContent = () => <BaseText>Test</BaseText>;
+    NewModal.show({
+      children: (<ChildContent />),
+    });
+    expect(wrapper.find(ChildContent)).toHaveLength(1);
+  });
+});

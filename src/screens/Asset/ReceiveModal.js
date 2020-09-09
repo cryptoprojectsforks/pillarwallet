@@ -27,16 +27,14 @@ import t from 'translations/translate';
 
 // components
 import { BaseText } from 'components/Typography';
-import SlideModal from 'components/Modals/SlideModal';
 import Button from 'components/Button';
 import WarningBanner from 'components/WarningBanner';
 import QRCodeWithTheme from 'components/QRCode';
-import { LabelBadge } from 'components/LabelBadge';
 import Toast from 'components/Toast';
 import ProfileImage from 'components/ProfileImage';
 
 // utils
-import { spacing, fontStyles, fontSizes } from 'utils/variables';
+import { spacing, fontStyles } from 'utils/variables';
 import { getEnsName, getAccountTypeByAddress } from 'utils/accounts';
 
 // models and types
@@ -115,6 +113,23 @@ const getButtonWidth = () => {
 const visaIcon = require('assets/icons/visa.png');
 const mastercardIcon = require('assets/icons/mastercard.png');
 
+const ReceiveCenterFloatingItem = (props) => {
+  const { user } = props;
+  const { profileImage, lastUpdateTime = 0, username = '' } = user;
+  const profileImageURI = profileImage ? `${profileImage}?t=${lastUpdateTime}` : null;
+  return (
+    <ImageWrapper style={{ position: 'absolute', marginTop: -24 }}>
+      <ProfileImage
+        uri={profileImageURI}
+        userName={username}
+        diameter={48}
+        borderWidth={0}
+        noShadow
+      />
+    </ImageWrapper>
+  );
+};
+
 class ReceiveModal extends React.Component<Props, *> {
   handleAddressShare = () => {
     const { address } = this.props;
@@ -130,56 +145,20 @@ class ReceiveModal extends React.Component<Props, *> {
 
   render() {
     const {
-      isVisible,
       address,
-      onModalHide,
       handleBuyTokens,
-      onModalHidden,
       showBuyTokensButton = false,
-      showErc20Note,
       accounts,
-      user,
     } = this.props;
 
-    const { profileImage, lastUpdateTime = 0, username = '' } = user;
     const ensName = getEnsName(accounts);
     const isSmartWallet = getAccountTypeByAddress(address, accounts) === ACCOUNT_TYPES.SMART_WALLET;
     const buttonWidth = showBuyTokensButton ? getButtonWidth() : 0;
     const needsSmallButtons = showBuyTokensButton && buttonWidth <= 150;
-    const profileImageURI = profileImage ? `${profileImage}?t=${lastUpdateTime}` : null;
-
     return (
-      <SlideModal
-        isVisible={isVisible}
-        onModalHide={onModalHide}
-        onModalHidden={onModalHidden}
-        noPadding
-        noClose
-        headerLeftItems={!!showErc20Note && [{
-          custom: (
-            <LabelBadge
-              label={t('label.erc20TokensOnly')}
-              labelStyle={{ fontSize: fontSizes.tiny }}
-              primary
-              containerStyle={{ marginLeft: 8 }}
-            />
-          ),
-        }]}
-        centerFloatingItem={
-          <ImageWrapper style={{ position: 'absolute', marginTop: -24 }}>
-            <ProfileImage
-              uri={profileImageURI}
-              userName={username}
-              diameter={48}
-              borderWidth={0}
-              noShadow
-            />
-          </ImageWrapper>
-        }
-      >
-        <ContentWrapper forceInset={{ top: 'never', bottom: 'always' }}>
-          <WarningBanner rounded small />
-          {!!ensName && !!isSmartWallet &&
+      <ContentWrapper forceInset={{ top: 'never', bottom: 'always' }}>
+        <WarningBanner rounded small />
+        {!!ensName && !!isSmartWallet &&
           <InfoView>
             <BaseText
               big
@@ -191,16 +170,16 @@ class ReceiveModal extends React.Component<Props, *> {
             <BaseText regular center secondary>{t('label.yourEnsName')}</BaseText>
           </InfoView>
           }
-          <QRCodeWrapper>
-            <View style={{ overflow: 'hidden', padding: 10 }}>
-              {!!address && <QRCodeWithTheme value={address} size={160} />}
-            </View>
-            <WalletAddress onPress={() => this.handleCopyToClipboard(address)}>
-              {address}
-            </WalletAddress>
-          </QRCodeWrapper>
-          <ButtonsRow>
-            {showBuyTokensButton && (
+        <QRCodeWrapper>
+          <View style={{ overflow: 'hidden', padding: 10 }}>
+            {!!address && <QRCodeWithTheme value={address} size={160} />}
+          </View>
+          <WalletAddress onPress={() => this.handleCopyToClipboard(address)}>
+            {address}
+          </WalletAddress>
+        </QRCodeWrapper>
+        <ButtonsRow>
+          {showBuyTokensButton && (
             <Button
               title={t('button.buyTokens')}
               onPress={handleBuyTokens}
@@ -211,25 +190,24 @@ class ReceiveModal extends React.Component<Props, *> {
               textStyle={{ paddingTop: 4 }}
             />
             )}
-            <Button
-              title={t('button.shareAddress')}
-              onPress={this.handleAddressShare}
-              width={buttonWidth}
-              small={needsSmallButtons}
-              block={!buttonWidth}
-              regularText
-              textStyle={{ paddingTop: 4 }}
-            />
-          </ButtonsRow>
-          {showBuyTokensButton && (
+          <Button
+            title={t('button.shareAddress')}
+            onPress={this.handleAddressShare}
+            width={buttonWidth}
+            small={needsSmallButtons}
+            block={!buttonWidth}
+            regularText
+            textStyle={{ paddingTop: 4 }}
+          />
+        </ButtonsRow>
+        {showBuyTokensButton && (
           <IconsContainer>
             <Image source={visaIcon} />
             <IconsSpacing />
             <Image source={mastercardIcon} />
           </IconsContainer>
           )}
-        </ContentWrapper>
-      </SlideModal>
+      </ContentWrapper>
     );
   }
 }
@@ -243,3 +221,5 @@ const mapStateToProps = ({
 });
 
 export default connect(mapStateToProps)(ReceiveModal);
+
+export const ReceiveModalCenterFloatingItem = connect(mapStateToProps)(ReceiveCenterFloatingItem);
